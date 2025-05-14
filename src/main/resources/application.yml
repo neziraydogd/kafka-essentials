@@ -1,0 +1,74 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: kafka-demo
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    # Producer configuration
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all                    # Strongest delivery guarantee
+      retries: 3                   # Retry count on failure
+      batch-size: 16384            # Batch size for performance
+      buffer-memory: 33554432      # Buffer memory allocation
+      compression-type: snappy     # Efficient compression algorithm
+      properties:
+        linger.ms: 10              # Delay to optimize batching
+        request.timeout.ms: 30000  # Request timeout
+        delivery.timeout.ms: 120000 # Maximum time for message delivery
+        enable.idempotence: true   # Enable idempotent producer for exactly-once semantics
+        max.in.flight.requests.per.connection: 5 # Max in-flight requests per connection
+
+    # Consumer configuration
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest     # Start from beginning for new consumer groups
+      enable-auto-commit: false       # Manual offset commit for better control
+      isolation-level: read_committed # Only read committed messages
+      max-poll-records: 500           # Maximum records per poll
+      properties:
+        spring.json.trusted.packages: "na.library.kafkaessentials.model" # Trusted package for deserialization
+        fetch.min.bytes: 1               # Minimum fetch size
+        fetch.max.wait.ms: 500           # Maximum wait time for fetch
+        max.partition.fetch.bytes: 1048576 # Max data per partition per fetch
+        heartbeat.interval.ms: 3000      # Heartbeat interval
+        session.timeout.ms: 45000        # Session timeout
+
+    # Admin configuration (for topic creation/deletion, etc.)
+    admin:
+      properties:
+        bootstrap.servers: localhost:9092
+
+    # Listener configuration
+    listener:
+      missing-topics-fatal: false    # Do not fail on missing topics
+      concurrency: 3                 # Number of consumer threads
+      ack-mode: MANUAL_IMMEDIATE     # Manual acknowledgment mode
+
+# Custom application configurations
+app:
+  kafka:
+    topic-name: demo-topic         # Main Kafka topic
+    group-id: demo-group           # Consumer group ID
+    custom-topics:
+      notification-topic: notifications
+      order-topic: orders
+      payment-topic: payments
+
+# Expose actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,kafka
+
+logging:
+  level:
+    org:
+      apache:
+        kafka: error

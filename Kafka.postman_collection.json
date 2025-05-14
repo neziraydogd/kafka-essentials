@@ -1,0 +1,505 @@
+{
+	"info": {
+		"_postman_id": "926a1388-6370-47eb-a7a1-eb6fafdea0b0",
+		"name": "Kafka",
+		"description": "Collection for testing Kafka Producer endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2260717"
+	},
+	"item": [
+		{
+			"name": "Send Message",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"msg-123\",\n    \"content\": \"Test message content\",\n    \"timestamp\": \"2025-05-13T10:15:30Z\",\n    \"sender\": \"postman-client\",\n    \"type\": \"INFO\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"messages"
+					]
+				},
+				"description": "Send a simple message to Kafka"
+			},
+			"response": []
+		},
+		{
+			"name": "Send Message Sync",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"msg-456\",\n    \"content\": \"Message with headers\",\n    \"timestamp\": \"2025-05-13T11:22:33Z\",\n    \"sender\": \"postman-client\",\n    \"type\": \"INFO\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/sendMessageSync",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"sendMessageSync"
+					]
+				},
+				"description": "Send a message with custom headers to Kafka"
+			},
+			"response": []
+		},
+		{
+			"name": "Send Notification",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"notif-789\",\n    \"content\": \"New notification for user\",\n    \"timestamp\": \"2025-05-13T12:45:30Z\",\n    \"sender\": \"notification-service\",\n    \"type\": \"NOTIFICATION\",\n    \"recipient\": \"user123\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/notifications",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"notifications"
+					]
+				},
+				"description": "Send a notification message to Kafka"
+			},
+			"response": []
+		},
+		{
+			"name": "Send Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"order-101\",\n    \"customerId\": \"cust-456\",\n    \"items\": [\n        {\n            \"productId\": \"prod-111\",\n            \"name\": \"Laptop\",\n            \"quantity\": 1,\n            \"price\": 1299.99\n        },\n        {\n            \"productId\": \"prod-222\",\n            \"name\": \"Mouse\",\n            \"quantity\": 2,\n            \"price\": 24.99\n        }\n    ],\n    \"totalAmount\": 1349.97,\n    \"status\": \"PENDING\",\n    \"orderDate\": \"2025-05-13T14:30:00Z\",\n    \"shippingAddress\": {\n        \"street\": \"123 Tech Street\",\n        \"city\": \"Istanbul\",\n        \"country\": \"Turkey\",\n        \"zipCode\": \"34000\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"orders"
+					]
+				},
+				"description": "Send an order to Kafka"
+			},
+			"response": []
+		},
+		{
+			"name": "Send Message to Specific Partition",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"partition-msg-001\",\n    \"content\": \"This message is targeted to partition 1\",\n    \"timestamp\": \"2025-05-13T16:20:45Z\",\n    \"sender\": \"partition-tester\",\n    \"type\": \"SYSTEM\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/messages/partition/1?topic=messages-topic&key=test-key",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"messages",
+						"partition",
+						"1"
+					],
+					"query": [
+						{
+							"key": "topic",
+							"value": "messages-topic"
+						},
+						{
+							"key": "key",
+							"value": "test-key"
+						}
+					]
+				},
+				"description": "Send a message to a specific Kafka partition"
+			},
+			"response": []
+		},
+		{
+			"name": "List Topic",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/topics",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"topics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Topic Details",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/topics/demo-topic",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"topics",
+						"demo-topic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Topic",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/topics?name=new-topic&partitions=3&replicationFactor=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"topics"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "new-topic"
+						},
+						{
+							"key": "partitions",
+							"value": "3"
+						},
+						{
+							"key": "replicationFactor",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Topic",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/topics/new-topic",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"topics",
+						"new-topic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Partitions to a Topic",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/topics/new-topic/partitions?newPartitionCount=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"topics",
+						"new-topic",
+						"partitions"
+					],
+					"query": [
+						{
+							"key": "newPartitionCount",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Batch Messages",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"id\": \"msg-1\",\r\n    \"content\": \"Batch message 1\",\r\n    \"sender\": \"nezir\"\r\n  },\r\n  {\r\n    \"id\": \"msg-2\",\r\n    \"content\": \"Batch message 2\",\r\n    \"sender\": \"pi\"\r\n  }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/messages/batch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"messages",
+						"batch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Topic Config",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"retention.ms\": \"86400000\",\r\n  \"cleanup.policy\": \"compact\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/topics/new-topic/config",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"topics",
+						"new-topic",
+						"config"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Kafka Health Check",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"retention.ms\": \"86400000\",\r\n  \"cleanup.policy\": \"compact\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/kafka/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"kafka",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "outbox pattern",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\"sistem çöktü mü ?\"\r\n ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/messages/kafkaSpringTransaction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"messages",
+						"kafkaSpringTransaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Multiple Messages with Exactly Once Delivery Semantics",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  \"1\",\r\n  \"2\",\r\n  \"3\"\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/messages/exactly-once-batch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"messages",
+						"exactly-once-batch"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
